@@ -93,7 +93,7 @@ class BookDataHolder {
     String formattedDescription = description.replace(" ", "-");
     String formmatedGenre = genre.replace(" ", "-");
 
-    return id + " " + formattedBookName +" " + formattedAuthorName + " " + formattedDescription + " " + rating + " " + publishedYear + " " + formmatedGenre + " " + price;
+    return id + " " + formattedBookName + " " + formattedAuthorName + " " + formattedDescription + " " + rating + " " + publishedYear + " " + formmatedGenre + " " + price;
   }
 
   public void printFormatted() {
@@ -146,7 +146,7 @@ class BookManager {
 
   public static void writeToFileBook(String filePath, List<BookDataHolder> dataHolderList) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
-        int currentHighestId = 0;
+        int currentHighestId = 1;
 
         // Find the current highest ID
         List<BookDataHolder> existingBooks = readFromFileBook(filePath);
@@ -160,7 +160,6 @@ class BookManager {
 
           writer.write(dataHolder.toString());
           writer.newLine();
-
         }
     } catch (IOException e) {
         e.printStackTrace();
@@ -205,8 +204,8 @@ class BookManager {
   }
 
   public static void sendEmail(BookDataHolder book, String email) {
-    String to = "whatashameitwouldbe@gmail.com"; // Replace with the recipient's email address
-    String from = email; // Replace with your Gmail email address
+    String to = email; // Replace with the recipient's email address
+    String from = "aastutesting@gmail.com"; // Replace with your Gmail email address
     String host = "smtp.gmail.com";
 
     Properties properties = System.getProperties();
@@ -217,7 +216,7 @@ class BookManager {
 
     Session session = Session.getDefaultInstance(properties, new Authenticator() {
         protected PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication("aastutesting@gmail.com", "Aastutesting1234");
+            return new PasswordAuthentication("aastutesting@gmail.com", "ayadabkmjzrigfqt");
         }
     });
 
@@ -230,7 +229,7 @@ class BookManager {
         // Construct the email body with book details
         String emailBody = "Book Name: " + book.getBookName() + "\n" +
                 "Author: " + book.getAuthorName() + "\n" +
-                "Rating: " + book.getRating() + "\n" +
+                "Rating: " + book.getRating() + "birr" +"\n" +
                 "Published Year: " + book.getPublishedYear() + "\n" +
                 "Genre: " + book.getGenre() + "\n" +
                 "Price: " + book.getPrice();
@@ -559,6 +558,7 @@ public class MainApp{
             System.out.print("Enter your choice :");
             choice = in.nextInt();
             isValidInput = true;
+            in.nextLine();
           } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please enter a valid integer.");
             // Clear the buffer to avoid infinite loop
@@ -583,6 +583,7 @@ public class MainApp{
                         System.out.print("Enter your choice: ");
                         innerChoice = in.nextInt();
                         isValidInput1 = true; // Break out of the loop if the input is valid
+                        in.nextLine();
                     } catch (InputMismatchException e) {
                         System.out.println("Invalid input. Please enter a valid integer.");
                         // Clear the buffer to avoid infinite loop
@@ -624,7 +625,8 @@ public class MainApp{
                           System.out.println("Published Year: " + foundBook.getPublishedYear());
                           System.out.println("Genre: " + foundBook.getGenre());
                           System.out.println("Price: " + foundBook.getPrice());
-  
+                          
+                          in.nextLine();
                                   // Send an email with book details
                           System.out.print("Enter your email again to get verification:");
                           String email = in.nextLine();
@@ -649,6 +651,7 @@ public class MainApp{
                         if(n == 1){
                           menu.bookPage();
                           isValid1 = true;
+                          in.nextLine();
                         }else {
                           System.out.println("You entered invalid number.");
                         }
@@ -661,21 +664,33 @@ public class MainApp{
 
                       break;
                     case 2:
-                    menu.postBookPage();
-                      List<BookDataHolder> books = new ArrayList<>();
-                      books.add(new BookDataHolder(menu.getBookName(), menu.getAuthorName(), menu.getDescription(), menu.getRating(), menu.getPublishedYear(), menu.getGenere(), menu.getPrice()));
-                      System.out.println("The book have been added successfully.");
-                      BookManager.writeToFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt", books);
-                      System.out.println("Book added successfully.");
-                      List<BookDataHolder> readBooks1 = BookManager.readFromFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt");
-                      // "%-5s %-30s %-20s %-50s %.3f %-20s %-15s %.2f%n",
-                      System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
-                      "ID", "Title", "Author", "Description", "Rating", "Published Year", "Genre", "Price");
-                      System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                  
-                      for(BookDataHolder book : readBooks1){
-                        book.printFormatted();
+                    
+                      while (true) {
+                        System.out.print("Do you want to post a book (Y/N)?:");
+                        String inputChar = in.nextLine();
+                        if(inputChar.trim().toLowerCase().equals("y")){
+                          menu.postBookPage();
+                          List<BookDataHolder> books = new ArrayList<>();
+                          books.add(new BookDataHolder(menu.getBookName(), menu.getAuthorName(), menu.getDescription(), menu.getRating(), menu.getPublishedYear(), menu.getGenere(), menu.getPrice()));
+                          System.out.println("The book have been added successfully.");
+                          BookManager.writeToFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt", books);
+                          System.out.println("Book added successfully.");
+                          List<BookDataHolder> readBooks1 = BookManager.readFromFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt");
+                          // "%-5s %-30s %-20s %-50s %.3f %-20s %-15s %.2f%n",
+                          System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
+                          "ID", "Title", "Author", "Description", "Rating", "Published Year", "Genre", "Price");
+                          System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                      
+                          for(BookDataHolder book : readBooks1){
+                            book.printFormatted();
+                          }
+                        } else if(inputChar.trim().toLowerCase().equals("n")) {
+                          break;
+                        } else {
+                          System.out.println("Invalid input! please enter a valid answer (y/n):");
+                        }
                       }
+
 
                     boolean isValid2 = false;
 
@@ -686,6 +701,7 @@ public class MainApp{
                         if(n == 1){
                           menu.bookPage();
                           isValid2 = true;
+                          in.nextLine();
                         }else {
                           System.out.println("You entered invalid number.");
                         }
@@ -716,17 +732,23 @@ public class MainApp{
                       System.out.println("");
                       System.out.println("");
 
-                      try {
-                        System.out.print("Press 1 to go back:");
-                        int n = in.nextInt();
-                        if(n == 1){
-                          menu.bookPage();
-                        }else {
-                          System.out.println("You entered invalid number.");
+                      while (true) {
+                        try {
+                          System.out.print("Press 1 to go back:");
+                          int n = in.nextInt();
+                          if(n == 1){
+                            menu.bookPage();
+                            in.nextLine();
+                            break;
+                          }else {
+                            System.out.println("You entered invalid number.");
+                          }
+                        } catch (InputMismatchException e) {
+                          System.out.println("invalid input!");
+                          in.nextInt();
                         }
-                      } catch (NumberFormatException e) {
-                        System.err.println("invalid input!");
                       }
+
                       break;
                     case 4:
                       showMenu();
@@ -747,7 +769,7 @@ public class MainApp{
             }
             break;
           case 2:
-              {
+              
                 menu.signup();
                 List<DataHolder> dataHolderList = new ArrayList<>();
                 dataHolderList.add(new DataHolder(
@@ -763,19 +785,26 @@ public class MainApp{
                 
                 System.out.println("Data written successfully.");
                 System.out.println("You have signed up succesfully. Please enter back and login.");
-                try {
-                  System.out.print("Press 1 to go back:");
-                  int n = in.nextInt();
-                  if(n == 1){
-                    menu.mainMenu();
-                  }else {
-                    System.out.println("You entered invalid number.");
+
+
+                while (true) {
+                  try {
+                    System.out.print("Press 1 to go back:");
+                    int n = in.nextInt();
+                    if(n == 1){
+                      menu.mainMenu();
+                      in.nextInt();
+                      break;
+                    }else {
+                      System.out.println("You entered invalid number.");
+                    }
+                  } catch (NumberFormatException e) {
+                    System.err.println("invalid input!");
                   }
-                } catch (NumberFormatException e) {
-                  System.err.println("invalid input!");
                 }
+
                 System.out.println("");
-              }
+              
             
             break;
           case 3:
@@ -783,10 +812,21 @@ public class MainApp{
               List<AdminDataHolder> readAdminCreditials = FileHandlerForAdmin.readFromFileAdmin("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\admin.txt");
               for (AdminDataHolder data : readAdminCreditials) {
                   if(data.getAdminEmail().equals(menu.getAdminEmail()) && data.getAdminPassword1().equals(menu.getAdminPassword1()) && data.getAdminPassword2().equals(menu.getAdminPassword2())){
-                    int innerChoice;
+                    int innerChoice = 0;
                     do{
-                      menu.adminpage();;
-                      innerChoice = in.nextInt();
+                      menu.adminpage();  
+                        while (true) {
+                          try {
+                            innerChoice = in.nextInt(); 
+                            in.nextLine();
+                            break;
+                          } catch (InputMismatchException e) {
+                            System.out.println("Invalid input. Please enter a valid integer.");
+                            // Clear the buffer to avoid infinite loop
+                            in.nextLine();
+                          }
+                        
+                        }
                       switch (innerChoice) {
                         case 1:
                            // Replace with the actual file path
@@ -809,45 +849,64 @@ public class MainApp{
                           // Print footer
                           System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
                           System.out.println("");
-                          in.nextLine();
-                          System.out.print("Enter the first name of the person you want to delete: ");
-                          String firstNameToDelete = in.nextLine();
-                          FileHandler.deleteCustomerByFirstName("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt", firstNameToDelete);
+                          
 
-                           // Replace with the actual file path
-                          List<DataHolder> customeres = AdminManager.readCustomersFromFile("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt");
-                      
-                          // Print header
-                          System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
-                          System.out.println("|   User Full Name     |          User Email          |   Mobile Number   |  Telegram Handler    |");
-                          System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
-                      
-                          // Loop through the array and print each customer's information without using toString
-                          for (DataHolder customer : customeres) {
-                              System.out.printf("| %-20s | %-29s| %-15s   | %-20s |%n",
-                                      customer.getUserFullName(),
-                                      customer.getUserEmail(),
-                                      customer.getUserMobileNo(),
-                                      customer.getUserTelegramHandler());
-                          }
-                      
-                          // Print footer
-                          System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
-                          System.out.println("");
-
-                          try {
-                            System.out.print("Press 1 to go back:");
-                            int n = in.nextInt();
-                            if(n == 1){
-                              menu.adminpage();
-                            }else {
-                              System.out.println("You entered invalid number.");
+                          while(true){
+                            System.out.print("Do you want to delete a customer? (Y/N):");
+                            String inputed = in.nextLine();
+                            if(inputed.trim().toLowerCase().equals("y")){
+                              System.out.print("Enter the first name of the person you want to delete: ");
+                              String firstNameToDelete = in.nextLine();
+                              in.nextLine();
+                              FileHandler.deleteCustomerByFirstName("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt", firstNameToDelete);
+    
+                               // Replace with the actual file path
+                              List<DataHolder> customeres = AdminManager.readCustomersFromFile("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt");
+                          
+                              // Print header
+                              System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
+                              System.out.println("|   User Full Name     |          User Email          |   Mobile Number   |  Telegram Handler    |");
+                              System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
+                          
+                              // Loop through the array and print each customer's information without using toString
+                              for (DataHolder customer : customeres) {
+                                  System.out.printf("| %-20s | %-29s| %-15s   | %-20s |%n",
+                                          customer.getUserFullName(),
+                                          customer.getUserEmail(),
+                                          customer.getUserMobileNo(),
+                                          customer.getUserTelegramHandler());
+                              }
+                          
+                              // Print footer
+                              System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
+                              System.out.println("");
+                            } else if (inputed.trim().toLowerCase().equals("n")) {
+                              break;
+                            } else {
+                              System.out.println("Invalid value! please enter a valid input yes or no value.");
                             }
-                          } catch (NumberFormatException e) {
-                            System.err.println("invalid input!");
                           }
 
-                          break;
+                          while (true) {
+                            try {
+                              System.out.print("Press 1 to go back:");
+                              int n = in.nextInt();
+                              if(n == 1){
+                                menu.adminpage();
+                                in.nextLine();
+                                break;
+                              }else {
+                                System.out.println("You entered an invalid number.");
+                              }
+                            } catch (InputMismatchException e) {
+                              System.out.println("invalid input!");
+                              in.nextLine();
+                            }
+                          }
+
+                          
+
+                           break; 
                         case 2:
                           
                         List<BookDataHolder> readBooks = BookManager.readFromFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt");
@@ -866,6 +925,7 @@ public class MainApp{
                               int bookIdToDelete = in.nextInt();
 
                               if (bookIdToDelete == -1) {
+                                  in.nextLine();
                                   break; // Stop deleting if -1 is entered
                               }
 
@@ -882,18 +942,24 @@ public class MainApp{
                                 System.out.println("");
 
                           }
-
-                          try {
-                            System.out.print("Press 1 to go back:");
-                            int n = in.nextInt();
-                            if(n == 1){
-                              menu.adminpage();
-                            }else {
-                              System.out.println("You entered invalid number.");
+                          
+                          while (true) {
+                            try {
+                              System.out.print("Press 1 to go back:");
+                              int n = in.nextInt();
+                              if(n == 1){
+                                menu.adminpage();
+                                break;
+                              }else {
+                                System.out.println("You entered invalid number.");
+                              }
+                              
+                            } catch (InputMismatchException e) {
+                              System.out.println("invalid input!");
+                              in.nextLine();
                             }
-                          } catch (NumberFormatException e) {
-                            System.err.println("invalid input!");
                           }
+
 
                           break;
                         case 3:
@@ -909,17 +975,23 @@ public class MainApp{
                           }
                             System.out.println("");
 
-                            try {
-                              System.out.print("Press 1 to go back:");
-                              int n = in.nextInt();
-                              if(n == 1){
-                                menu.adminpage();
-                              }else {
-                                System.out.println("You entered invalid number.");
+                            while (true) {
+                              try {
+                                System.out.print("Press 1 to go back:");
+                                int n = in.nextInt();
+                                if(n == 1){
+                                  menu.adminpage();
+                                  in.nextInt();
+                                  break;
+                                }else {
+                                  System.out.println("You entered invalid number.");
+                                }
+                              } catch (InputMismatchException e) {
+                                System.out.println("invalid input!");
+                                in.nextLine();
                               }
-                            } catch (NumberFormatException e) {
-                              System.err.println("invalid input!");
                             }
+
 
                           break;
                         case 4:
@@ -940,18 +1012,24 @@ public class MainApp{
           System.out.println("");
             menu.printAboutUsParagraph();
             System.out.println("");
-            try {
-              System.out.print("Press 1 to go back:");
-              int n = in.nextInt();
-              if(n == 1){
-                showMenu();
+
+            while (true) {
+              try {
+                System.out.print("Press 1 to go back:");
+                int n = in.nextInt();
+                if(n == 1){
+                  showMenu();
+                  in.nextLine();
+                  break;
+                }else {
+                  System.out.println("You entered invalid number.");
+                }
+              } catch (InputMismatchException e) {
+                System.out.println("invalid input!");
                 in.nextLine();
-              }else {
-                System.out.println("You entered invalid number.");
               }
-            } catch (InputMismatchException e) {
-              System.err.println("invalid input!");
             }
+
           case 5:
               break;
         
