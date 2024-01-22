@@ -870,6 +870,17 @@ public class MainApp{
                               }
 
                               BookManager.deleteBookById("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt", bookIdToDelete);
+                              readBooks = BookManager.readFromFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt");
+                              // "%-5s %-30s %-20s %-50s %.3f %-20s %-15s %.2f%n",
+                              System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
+                              "ID", "Title", "Author", "Description", "Rating", "Published Year", "Genre", "Price");
+                              System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                          
+                              for(BookDataHolder book : readBooks){
+                                book.printFormatted();
+                              }
+                                System.out.println("");
+
                           }
 
                           try {
@@ -963,34 +974,6 @@ public class MainApp{
     System.out.println("|      |                                   |      |");
     System.out.println("| Book |        Thank you for using.       | Book |"); 
     System.out.println("|______|                                   |______|");
-
-    // String filePath = "F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt"; // Replace with the actual file path
-    // List<DataHolder> customers = AdminManager.readCustomersFromFile(filePath);
-
-    // // Print header
-    // System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
-    // System.out.println("|   User Full Name     |          User Email          |   Mobile Number   |  Telegram Handler    |");
-    // System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
-
-    // // Loop through the array and print each customer's information without using toString
-    // for (DataHolder customer : customers) {
-    //     System.out.printf("| %-20s | %-29s| %-15s   | %-20s |%n",
-    //             customer.getUserFullName(),
-    //             customer.getUserEmail(),
-    //             customer.getUserMobileNo(),
-    //             customer.getUserTelegramHandler());
-    // }
-
-    // // Print footer
-    // System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
-
-    // String filePath = "F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt"; // Replace with the actual file path
-
-    // Scanner scanner = new Scanner(System.in);
-    // System.out.print("Enter the first name of the customer to delete: ");
-    // String firstNameToDelete = scanner.nextLine();
-
-    // FileHandler.deleteCustomerByFirstName(filePath, firstNameToDelete);
 
   }
 }
