@@ -16,11 +16,9 @@ import java.util.InputMismatchException;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
+import javax.mail.internet.MimeMessage; 
 
 import Menu.Menu;
-
 
 class BookDataHolder {
   private int id;
@@ -103,7 +101,6 @@ class BookDataHolder {
   }
 }
 
-
 class BookManager {
 
   private static boolean isInteger(String s) {
@@ -133,9 +130,7 @@ class BookManager {
                   double price = Double.parseDouble(parts[7]);
 
                   dataHolderList.add(new BookDataHolder(id, bookName, authorName, description, rating, publishedYear, genre, price));
-              } else {
-                  System.out.println("Invalid line format: " + line); // Print invalid lines for debugging
-              }
+              } 
           }
       } catch (IOException | NumberFormatException e) {
           e.printStackTrace();
@@ -382,7 +377,7 @@ class DataHolder {
 
 }
 
-class AdminDataHolder{
+class AdminDataHolder {
   private String email;
   private String adminPassword1;
   private String adminPassword2;
@@ -427,9 +422,7 @@ class AdminManager{
                 // Create DataHolder object excluding the password
                 DataHolder customer = new DataHolder(userFullName, userEmail, userPassword, userMobileNo, userTelegramHandler);
                 customerList.add(customer);
-            } else {
-                System.out.println("Invalid line format: " + line); // Print invalid lines for debugging
-            }
+            } 
         }
     } catch (IOException e) {
         e.printStackTrace();
@@ -455,9 +448,7 @@ class FileHandlerForAdmin{
                 String password2 = parts[2];
       
                 adminDataHolderList.add(new AdminDataHolder(userAdminEmail, password1, password2));
-            } else {
-                System.out.println("Invalid line format: " + line); // Print invalid lines for debugging
-            }
+            } 
         }
     } catch (IOException e) {
         e.printStackTrace();
@@ -504,9 +495,7 @@ class FileHandler{
                 String userTelegramHandler = parts[5];
 
                 dataHolderList.add(new DataHolder(userFullName, userEmail, userPassword, userMobileNo, userTelegramHandler));
-            } else {
-                System.out.println("Invalid line format: " + line); // Print invalid lines for debugging
-            }
+            } 
         }
     } catch (IOException e) {
         e.printStackTrace();
@@ -545,10 +534,19 @@ class FileHandler{
 
 public class MainApp{
   public static void showMenu(){
+
     try (Scanner in = new Scanner(System.in)) {
       Menu menu = new Menu();
       int choice = 0;
-      
+
+      /*
+       * Replace this absolute path with yours
+       */
+      String filePathCustomers = "F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt";
+      String filePathBooks = "F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt";
+      String filePathAdmin = "F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\admin.txt";
+
+
       do{
         menu.mainMenu();
         boolean isValidInput = false;
@@ -569,7 +567,7 @@ public class MainApp{
         switch (choice) {
           case 1:
           menu.login();
-          List<DataHolder> readCrenditials = FileHandler.readFromFile("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt");
+          List<DataHolder> readCrenditials = FileHandler.readFromFile(filePathCustomers);
           boolean istrue = false;
           for (DataHolder data : readCrenditials) {
               if(data.getUserEmail().equals(menu.getLoginEmail()) && data.getUserPassword().equals(menu.getLoginPassword())){
@@ -594,7 +592,7 @@ public class MainApp{
                   
                   switch (innerChoice) {
                     case 1:
-                    List<BookDataHolder> readBooks = BookManager.readFromFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt");
+                    List<BookDataHolder> readBooks = BookManager.readFromFileBook(filePathBooks);
                     // "%-5s %-30s %-20s %-50s %.3f %-20s %-15s %.2f%n",
                     System.out.println("");
                     System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
@@ -615,7 +613,7 @@ public class MainApp{
                       } else if(menu.getBuyYorN().equals("y")){
                         System.out.print("Enter the bookId you want to buy :");
                         int id = in.nextInt();
-                        BookDataHolder foundBook = BookManager.searchBookById("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt", id);
+                        BookDataHolder foundBook = BookManager.searchBookById(filePathBooks, id);
   
                         if (foundBook != null) {
                           System.out.println("Book Details:");
@@ -663,7 +661,7 @@ public class MainApp{
                     }
 
                       break;
-                    case 2:
+                    case 2: 
                     
                       while (true) {
                         System.out.print("Do you want to post a book (Y/N)?:");
@@ -673,9 +671,9 @@ public class MainApp{
                           List<BookDataHolder> books = new ArrayList<>();
                           books.add(new BookDataHolder(menu.getBookName(), menu.getAuthorName(), menu.getDescription(), menu.getRating(), menu.getPublishedYear(), menu.getGenere(), menu.getPrice()));
                           System.out.println("The book have been added successfully.");
-                          BookManager.writeToFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt", books);
+                          BookManager.writeToFileBook(filePathBooks, books);
                           System.out.println("Book added successfully.");
-                          List<BookDataHolder> readBooks1 = BookManager.readFromFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt");
+                          List<BookDataHolder> readBooks1 = BookManager.readFromFileBook(filePathBooks);
                           // "%-5s %-30s %-20s %-50s %.3f %-20s %-15s %.2f%n",
                           System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
                           "ID", "Title", "Author", "Description", "Rating", "Published Year", "Genre", "Price");
@@ -714,15 +712,12 @@ public class MainApp{
 
                       break;
                     case 3:
-                      in.nextLine();
                       System.out.println("");
                       System.out.println("");
                       System.out.print("Enter a keyword to be searched:");
                       String keyword = in.nextLine();
-                      String filePath = "F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt";
-                      // Replace with the keyword you want to search
-                  
-                      List<BookDataHolder> searchResults = BookManager.searchByKeyWord(filePath, keyword);
+
+                      List<BookDataHolder> searchResults = BookManager.searchByKeyWord(filePathBooks, keyword);
                       System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
                       "ID", "Title", "Author", "Description", "Rating", "Published Year", "Genre", "Price");
                       System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -780,7 +775,7 @@ public class MainApp{
                         menu.getTelegramHandler()
                 ));
       
-                FileHandler.writeToFile("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt", dataHolderList);
+                FileHandler.writeToFile(filePathCustomers, dataHolderList);
                 System.out.println("");
                 
                 System.out.println("Data written successfully.");
@@ -809,7 +804,7 @@ public class MainApp{
             break;
           case 3:
               menu.adminLogin();
-              List<AdminDataHolder> readAdminCreditials = FileHandlerForAdmin.readFromFileAdmin("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\admin.txt");
+              List<AdminDataHolder> readAdminCreditials = FileHandlerForAdmin.readFromFileAdmin(filePathAdmin);
               for (AdminDataHolder data : readAdminCreditials) {
                   if(data.getAdminEmail().equals(menu.getAdminEmail()) && data.getAdminPassword1().equals(menu.getAdminPassword1()) && data.getAdminPassword2().equals(menu.getAdminPassword2())){
                     int innerChoice = 0;
@@ -830,7 +825,7 @@ public class MainApp{
                       switch (innerChoice) {
                         case 1:
                            // Replace with the actual file path
-                          List<DataHolder> customers = AdminManager.readCustomersFromFile("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt");
+                          List<DataHolder> customers = AdminManager.readCustomersFromFile(filePathCustomers);
                       
                           // Print header
                           System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
@@ -858,10 +853,10 @@ public class MainApp{
                               System.out.print("Enter the first name of the person you want to delete: ");
                               String firstNameToDelete = in.nextLine();
                               in.nextLine();
-                              FileHandler.deleteCustomerByFirstName("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt", firstNameToDelete);
+                              FileHandler.deleteCustomerByFirstName(filePathCustomers, firstNameToDelete);
     
                                // Replace with the actual file path
-                              List<DataHolder> customeres = AdminManager.readCustomersFromFile("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\customers.txt");
+                              List<DataHolder> customeres = AdminManager.readCustomersFromFile(filePathCustomers);
                           
                               // Print header
                               System.out.println("|----------------------|------------------------------|-------------------|----------------------|");
@@ -909,7 +904,7 @@ public class MainApp{
                            break; 
                         case 2:
                           
-                        List<BookDataHolder> readBooks = BookManager.readFromFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt");
+                        List<BookDataHolder> readBooks = BookManager.readFromFileBook(filePathBooks);
                         // "%-5s %-30s %-20s %-50s %.3f %-20s %-15s %.2f%n",
                         System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
                         "ID", "Title", "Author", "Description", "Rating", "Published Year", "Genre", "Price");
@@ -929,8 +924,8 @@ public class MainApp{
                                   break; // Stop deleting if -1 is entered
                               }
 
-                              BookManager.deleteBookById("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt", bookIdToDelete);
-                              readBooks = BookManager.readFromFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt");
+                              BookManager.deleteBookById(filePathBooks, bookIdToDelete);
+                              readBooks = BookManager.readFromFileBook(filePathBooks);
                               // "%-5s %-30s %-20s %-50s %.3f %-20s %-15s %.2f%n",
                               System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
                               "ID", "Title", "Author", "Description", "Rating", "Published Year", "Genre", "Price");
@@ -964,7 +959,7 @@ public class MainApp{
                           break;
                         case 3:
                         
-                          List<BookDataHolder> readBookes = BookManager.readFromFileBook("F:\\Learning-MERN\\Java-without-GUI\\OnlineBookstore\\src\\Files\\books.txt");
+                          List<BookDataHolder> readBookes = BookManager.readFromFileBook(filePathBooks);
                           // "%-5s %-30s %-20s %-50s %.3f %-20s %-15s %.2f%n",
                           System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
                           "ID", "Title", "Author", "Description", "Rating", "Published Year", "Genre", "Price");

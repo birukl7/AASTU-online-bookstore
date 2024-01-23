@@ -3,3 +3,4 @@
 3 Sapiens Yuval-Noah-Harari A-Brief-History-of-HumanKind 4.4 2011 Non-fiction 199.99
 4 Think-Again Adam-Grant The-Power-of-Knowing-What-You-Do-not-Know 4.2 Feburary-2-2021 self-help 124.99
 5 The-Girl-who-Survived Bronia-Brandman A-True-Story-of-the-Holocaust 4.0 2010 Biography 174.99
+6 What-We-Owe-the-Future William-mcalisk what-we-owe-the-future 3.2 2022 philosophy 123.99
