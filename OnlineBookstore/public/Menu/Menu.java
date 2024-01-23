@@ -137,8 +137,7 @@ public class Menu {
     this.userMobile = in.nextLine();
     System.out.println("5. Enter your Telegram handler :");
     this.userTelegramHandler = in.nextLine();
-    System.out.println("5. Go back to main menu :");
-    this.mainMenu();
+    
   }
 
   public void printAboutUsParagraph() {

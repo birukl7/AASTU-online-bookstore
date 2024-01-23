@@ -466,11 +466,11 @@ class FileHandler{
         for (DataHolder dataHolder : data) {
             // Write each field separated by whitespace on the same line
             writer.printf("%s %s %s %s %s%n",
-                    dataHolder.getUserFullName(),
-                    dataHolder.getUserEmail(),
-                    dataHolder.getUserPassword(),
-                    dataHolder.getUserMobileNo(),
-                    dataHolder.getUserTelegramHandler());
+                    dataHolder.getUserFullName().trim().replace(" ", "-"),
+                    dataHolder.getUserEmail().trim(),
+                    dataHolder.getUserPassword().trim(),
+                    dataHolder.getUserMobileNo().trim().replace(" ", "-"),
+                    dataHolder.getUserTelegramHandler().trim());
         }
     } catch (IOException e) {
         e.printStackTrace();
@@ -487,12 +487,12 @@ class FileHandler{
            // System.out.println("Read line: " + line); // Print the line being read
 
             String[] parts = line.trim().split("\\s+");
-            if (parts.length == 6) {
-                String userFullName = parts[0] +" "+ parts[1];
-                String userEmail = parts[2];
-                String userPassword = parts[3];
-                String userMobileNo = parts[4];
-                String userTelegramHandler = parts[5];
+            if (parts.length == 5) {
+                String userFullName = parts[0].replace("-", " ");
+                String userEmail = parts[1];
+                String userPassword = parts[2];
+                String userMobileNo = parts[3].replace("-", " ");
+                String userTelegramHandler = parts[4];
 
                 dataHolderList.add(new DataHolder(userFullName, userEmail, userPassword, userMobileNo, userTelegramHandler));
             } 
@@ -788,13 +788,14 @@ public class MainApp{
                     int n = in.nextInt();
                     if(n == 1){
                       menu.mainMenu();
-                      in.nextInt();
+                      in.nextLine();
                       break;
                     }else {
                       System.out.println("You entered invalid number.");
                     }
                   } catch (NumberFormatException e) {
-                    System.err.println("invalid input!");
+                    System.out.println("invalid input!");
+                    in.nextLine();
                   }
                 }
 
