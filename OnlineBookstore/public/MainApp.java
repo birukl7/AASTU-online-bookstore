@@ -412,12 +412,12 @@ class AdminManager{
         String line;
         while ((line = reader.readLine()) != null) {
             String[] parts = line.trim().split("\\s+");
-            if (parts.length == 6) {
-                String userFullName = parts[0] + " " + parts[1];
-                String userEmail = parts[2];
-                String userPassword = parts[3];
-                String userMobileNo = parts[4];
-                String userTelegramHandler = parts[5];
+            if (parts.length == 5) {
+                String userFullName = parts[0].replace("-", " ");
+                String userEmail = parts[1];
+                String userPassword = parts[2];
+                String userMobileNo = parts[3].replace("-", " ");
+                String userTelegramHandler = parts[4];
 
                 // Create DataHolder object excluding the password
                 DataHolder customer = new DataHolder(userFullName, userEmail, userPassword, userMobileNo, userTelegramHandler);
@@ -504,12 +504,12 @@ class FileHandler{
     return dataHolderList;
   }
 
-  public static void deleteCustomerByFirstName(String filePath, String firstName) {
+  public static void deleteCustomerByFirstName(String filePath, String telegramHandler) {
     List<DataHolder> customers = readFromFile(filePath);
     List<DataHolder> updatedCustomers = new ArrayList<>();
 
     for (DataHolder customer : customers) {
-        if (!customer.getUserFullName().toLowerCase().startsWith(firstName.toLowerCase())) {
+        if (!customer.getUserTelegramHandler().toLowerCase().equals(telegramHandler.trim().toLowerCase())) {
             updatedCustomers.add(customer);
         }
     }
@@ -517,10 +517,10 @@ class FileHandler{
     try (PrintWriter writer = new PrintWriter(new FileWriter(filePath, false))) {
         for (DataHolder customer : updatedCustomers) {
             writer.printf("%s %s %s %s %s%n",
-                    customer.getUserFullName(),
+                    customer.getUserFullName().replace(" ", "-"),
                     customer.getUserEmail(),
                     customer.getUserPassword(),
-                    customer.getUserMobileNo(),
+                    customer.getUserMobileNo().replace(" ", "-"),
                     customer.getUserTelegramHandler());
         }
     } catch (IOException e) {
@@ -740,7 +740,7 @@ public class MainApp{
                           }
                         } catch (InputMismatchException e) {
                           System.out.println("invalid input!");
-                          in.nextInt();
+                          in.nextLine();
                         }
                       }
 
@@ -781,26 +781,8 @@ public class MainApp{
                 System.out.println("Data written successfully.");
                 System.out.println("You have signed up succesfully. Please enter back and login.");
 
-
-                while (true) {
-                  try {
-                    System.out.print("Press 1 to go back:");
-                    int n = in.nextInt();
-                    if(n == 1){
-                      menu.mainMenu();
-                      in.nextLine();
-                      break;
-                    }else {
-                      System.out.println("You entered invalid number.");
-                    }
-                  } catch (NumberFormatException e) {
-                    System.out.println("invalid input!");
-                    in.nextLine();
-                  }
-                }
-
                 System.out.println("");
-              
+              menu.mainMenu();
             
             break;
           case 3:
@@ -851,12 +833,10 @@ public class MainApp{
                             System.out.print("Do you want to delete a customer? (Y/N):");
                             String inputed = in.nextLine();
                             if(inputed.trim().toLowerCase().equals("y")){
-                              System.out.print("Enter the first name of the person you want to delete: ");
-                              String firstNameToDelete = in.nextLine();
-                              in.nextLine();
-                              FileHandler.deleteCustomerByFirstName(filePathCustomers, firstNameToDelete);
+                              System.out.print("Enter the telegram Handler of the person you want to delete: ");
+                              String telegramHandlerToDelete = in.nextLine();
+                              FileHandler.deleteCustomerByFirstName(filePathCustomers, telegramHandlerToDelete);
     
-                               // Replace with the actual file path
                               List<DataHolder> customeres = AdminManager.readCustomersFromFile(filePathCustomers);
                           
                               // Print header
@@ -917,26 +897,31 @@ public class MainApp{
                           System.out.println("");
                           // Continuously ask for book ID to delete until the admin decides to stop
                           while (true) {
+                            try {
                               System.out.print("Enter the book ID to delete (or -1 to stop): ");
                               int bookIdToDelete = in.nextInt();
 
                               if (bookIdToDelete == -1) {
                                   in.nextLine();
                                   break; // Stop deleting if -1 is entered
+                              } else {
+                                BookManager.deleteBookById(filePathBooks, bookIdToDelete);
+                                readBooks = BookManager.readFromFileBook(filePathBooks);
+                                // "%-5s %-30s %-20s %-50s %.3f %-20s %-15s %.2f%n",
+                                System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
+                                "ID", "Title", "Author", "Description", "Rating", "Published Year", "Genre", "Price");
+                                System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                            
+                                for(BookDataHolder book : readBooks){
+                                  book.printFormatted();
+                                }
+                                  System.out.println("");
                               }
 
-                              BookManager.deleteBookById(filePathBooks, bookIdToDelete);
-                              readBooks = BookManager.readFromFileBook(filePathBooks);
-                              // "%-5s %-30s %-20s %-50s %.3f %-20s %-15s %.2f%n",
-                              System.out.printf("%-5s %-30s %-20s %-50s %-8s %-20s %-15s %-8s%n",
-                              "ID", "Title", "Author", "Description", "Rating", "Published Year", "Genre", "Price");
-                              System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                          
-                              for(BookDataHolder book : readBooks){
-                                book.printFormatted();
-                              }
-                                System.out.println("");
-
+                            } catch (InputMismatchException e) {
+                              System.out.println("invalid character");
+                              in.nextLine();
+                            }
                           }
                           
                           while (true) {

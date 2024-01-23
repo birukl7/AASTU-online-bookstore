@@ -49,6 +49,11 @@ public class Menu {
     System.out.println("");
     System.out.println("");
     System.out.println("************** Welcome to AASTU Bookstore **************");
+    System.out.println("--------------------------------------------------");
+    System.out.println("|         Demo Login email : ayele@gmail.com      |");
+    System.out.println("|         Demo Login password : 12345             |");
+    System.out.println("--------------------------------------------------");
+    System.out.println("");
     System.out.println("1. Enter you email :");
     this.loginEmail = in.nextLine();
     System.out.println("2. Enter password :");
@@ -59,6 +64,12 @@ public class Menu {
     System.out.println("");
     System.out.println("");
     System.out.println("************** Welcome to AASTU Bookstore **************");
+    System.out.println("-------------------------------------------------");
+    System.out.println("|     Demo Admin email : brex12@gmail.com        |");
+    System.out.println("|     Demo Admin password1 : qwertyui            |");
+    System.out.println("|     Demo Admin password1 : 12345678            |");
+    System.out.println("-------------------------------------------------");
+    System.out.println("");
     System.out.println("1. Enter admin email :");
     this.adminEmail = in.nextLine();
     System.out.println("2. Enter password 1 :");
@@ -95,31 +106,102 @@ public class Menu {
     this.buyYorN = in.nextLine();
   }
 
+  private void checker(String menu, String description, String property){
+    while (true) {
+      System.out.println(menu);
+      property = in.nextLine();
+      if(property.equals("")|| property.equals(null) || property.equals(" ")){
+        System.out.println(description);
+      }else{
+        break;
+      }
+    }
+  }
+
   public void postBookPage(){
-    try {
+
       System.out.println("");
       System.out.println("");
       System.out.println("************** Welcome to AASTU Bookstore **************");
-      System.out.println("1. Enter the book name :");
-      this.bookName = in.nextLine();
-      System.out.println("2. Enter the author name :");
-      this.authorName = in.nextLine();
-      System.out.println("3. Enter the book's description :");
-      this.description = in.nextLine();
-      System.out.println("4. Enter the book's published year :");
-      this.publishedYear = in.nextLine();
-      System.out.println("5. Enter the book's rating it gets so far(only numerical values like 4.4) :");
-      this.rating = in.nextDouble();
-      in.nextLine();
-      System.out.println("6. Enter the book's price you want to be sold( only numerical values like 99.99 ) :");
-      this.price = in.nextDouble();
-      in.nextLine();
-      System.out.println("7. Enter the book's genre :");
-      this.genere = in.nextLine();
 
-    } catch (InputMismatchException e) {
-      System.err.println("Invalid input! Please enter a valid double value.");
-    }
+      while (true) {
+        System.out.println("1. Enter the book name *:");
+        this.bookName = in.nextLine();
+        if(this.bookName.equals("")|| this.bookName.equals(null) || this.bookName.equals(" ")){
+          System.out.println("Book Name is a required field.");
+        }else{
+          break;
+        }
+      }
+
+      while (true) {
+        System.out.println("2. Enter the author name *:");
+        this.authorName = in.nextLine();
+        if(this.authorName.equals("")|| this.authorName.equals(null) || this.authorName.equals(" ")){
+          System.out.println("Author Name is a required field.");
+        }else{
+          break;
+        }
+      }
+
+      while (true) {
+        System.out.println("3. Enter the book's description *:");
+        this.description = in.nextLine();
+        if(this.description.equals("")|| this.description.equals(null) || this.description.equals(" ")){
+          System.out.println("Book's description is a required field.");
+        }else{
+          break;
+        }
+      }
+         
+      checker("4. Enter the book's published year *:","Book's published year is a required field." , this.publishedYear);
+      
+      while (true) {
+        try {
+          System.out.println("5. Enter the book's rating it gets so far(only numerical values like 4.4) :");
+          this.rating = in.nextDouble();
+          if(this.rating < 0 ){
+            System.out.println("Book's rating can not be nagative.");
+          }else{
+            break;
+          }
+        } catch (InputMismatchException e) {
+          System.out.println("invalid character!");
+          this.rating = 0.0;
+          in.nextLine();
+        }
+      }
+      
+      
+      while (true) {
+        try {
+          System.out.println("6. Enter the book's price you want to be sold( only numerical values like 99.99 ) :");
+          this.price = in.nextDouble();
+          if(this.price < 0 ){
+            System.out.println("Book's price can not be nagative.");
+          }else{
+            in.nextLine();
+            break;
+          }
+        } catch (InputMismatchException e) {
+          System.out.println("invalid character!");
+          this.price = 0.0;
+          in.nextLine();
+        }
+      }
+      
+      while (true) {
+        System.out.println("7. Enter the book's genre *:");
+        this.genere = in.nextLine();
+        if(this.genere.equals(null) || this.genere.equals("") || this.genere.equals(" ")){
+          System.out.println("Book's genre is required field.");
+        } else {
+          break;
+        }
+      }
+
+
+
   }
 
   public void signup(){
@@ -127,16 +209,65 @@ public class Menu {
     System.out.println("");
     System.out.println("");
     System.out.println("************** Welcome to AASTU Bookstore **************");
-    System.out.println("1. Enter your fullname(fname and lname separeted by whitespace.):");
-    this.userFullName = in.nextLine();
-    System.out.println("2. Enter your email :");
-    this.userEmail = in.nextLine();
-    System.out.println("3. Enter a password :");
-    this.userPassword = in.nextLine();
-    System.out.println("4. Enter your Mobile NO :");
-    this.userMobile = in.nextLine();
-    System.out.println("5. Enter your Telegram handler :");
-    this.userTelegramHandler = in.nextLine();
+    System.out.println("");
+    System.out.println("");
+    
+    
+    
+    while (true) {
+      System.out.println("1. Enter your fullname(fname and lname separeted by whitespace.):");
+      this.userFullName = in.nextLine();
+      if(this.userFullName.equals("")|| this.userFullName.equals(null) || this.userFullName.equals(" ")){
+        System.out.println("Name is a required field.");
+      }else{
+        break;
+      }
+    }
+    
+
+    while (true) {
+      System.out.println("2. Enter your email :");
+      this.userEmail = in.nextLine();
+      if(this.userEmail.equals("")|| this.userEmail.equals(null) || this.userEmail.equals(" ")){
+        System.out.println("Email is a required field.");
+      }else{
+        break;
+      }
+    }
+    
+    
+
+    while (true) {
+      System.out.println("3. Enter a password :");
+      this.userPassword = in.nextLine();
+      if(this.userPassword.equals("")|| this.userPassword.equals(null) || this.userPassword.equals(" ")){
+        System.out.println("Password is a required field.");
+      }else{
+        break;
+      }
+    }
+
+    while (true) {
+      System.out.println("4. Enter your Mobile NO :");
+      this.userMobile = in.nextLine();
+      if(this.userMobile.equals("")|| this.userMobile.equals(null) || this.userMobile.equals(" ")){
+        System.out.println("Mobile no. is a required field.");
+      }else{
+        break;
+      }
+    }
+  
+
+    while (true) {
+      System.out.println("5. Enter your Telegram handler (*):");
+      this.userTelegramHandler = in.nextLine();
+      if(this.userTelegramHandler.equals("")|| this.userTelegramHandler.equals(null) || this.userTelegramHandler.equals(" ")){
+        System.out.println("Telegram handler is a required field.");
+      }else{
+        break;
+      }
+    }
+
     
   }
 
